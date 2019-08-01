@@ -7,13 +7,10 @@ producer = KafkaProducer(bootstrap_servers=[get_kafka_binder_brokers()])
 while True:
     for message in consumer:
         output_message = message.value
-        print(message)
         reverse_string = get_reverse_string()
 
         if reverse_string is not None and reverse_string.lower() == "true":
-            print(output_message)
-            output_message = "".join(reversed(str(output_message, 'utf-8')))
+            output_message = bytes("".join(reversed(str(output_message, 'utf-8'))), 'utf-8')
 
-        print(output_message)
-        producer.send(get_output_channel(), bytes(output_message, 'utf-8'))
+        producer.send(get_output_channel(), bytes(output_message))
 
