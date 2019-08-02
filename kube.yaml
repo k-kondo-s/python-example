@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: good
+  labels:
+    app: good
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: good
+      labels:
+        app: good
+    spec:
+      containers:
+        - name: good
+          image: kenchaaan/python-example
+          imagePullPolicy: IfNotPresent
+          args:
+            - "--spring.cloud.stream.bindings.input.destination=input"
+            - "--spring.cloud.stream.bindings.output.destination=output"
+            - "--reverestring=true"
+          env:
+            - name: SPRING_CLOUD_STREAM_KAFKA_BINDER_BROKERS
+              value: scdf-kafka-headless.default.svc.cluster.local
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: good
