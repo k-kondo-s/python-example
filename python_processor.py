@@ -1,21 +1,23 @@
 from kafka import KafkaConsumer, KafkaProducer
 from util.task_args import get_kafka_binder_brokers, get_input_channel, get_output_channel, get_reverse_string
 from util.http_server import HttpHealthServer
+from ml_actor import Mlalgorithm
+
+N = 3
 
 consumer = KafkaConsumer(get_input_channel(), bootstrap_servers=[get_kafka_binder_brokers()])
 producer = KafkaProducer(bootstrap_servers=[get_kafka_binder_brokers()])
-print('pre-thread')
 HttpHealthServer.run_thread()
-print('post-thread')
+
+m = Mlalgorithm()
+
+# w = [1 for i in range(N)]
+w = [0.0, 0.0, 1.0]
 
 while True:
     for message in consumer:
-        print('within while')
-        output_message = message.value
-        reverse_string = get_reverse_string()
-
-        if reverse_string is not None and reverse_string.lower() == "true":
-            output_message = bytes("".join(reversed(str(output_message, 'utf-8'))), 'utf-8')
-
-        producer.send(get_output_channel(), bytes(output_message))
+        x, y = list(map(lambda z: float(z), message.value.decode('utf-8').split(',')))
+        w = m.calculate(x, y, w)
+        print(w)
+        producer.send(get_output_channel(), bytes(','.join(map(str, w)), encoding='utf8'))
 
