@@ -1,13 +1,12 @@
 class Mlalgorithm:
     def __init__(self):
-        self.mu = 0.001
-        self.limit = 1000
+        self.mu = 0.1
 
     def calculate(self, x, y, w):
-        for i in range(self.limit):
-            f_wx = sum([w[k] * (x ** k) for k in range(len(w))])
-            w_result = [w[k] + self.mu * (y - f_wx) * (x ** k) for k in range(len(w))]
-            w = w_result
+        # for i in range(10000):
+        f_wx = sum([w[k] * (x ** k) for k in range(len(w))])
+        w_result = [w[k] + self.mu * (y - f_wx) * (x ** k) for k in range(len(w))]
+        w = w_result
         return w
 
 

@@ -3,7 +3,7 @@ from util.task_args import get_kafka_binder_brokers, get_input_channel, get_outp
 from util.http_server import HttpHealthServer
 from ml_actor import Mlalgorithm
 
-N = 3
+N = 4
 
 consumer = KafkaConsumer(get_input_channel(), bootstrap_servers=[get_kafka_binder_brokers()])
 producer = KafkaProducer(bootstrap_servers=[get_kafka_binder_brokers()])
@@ -11,8 +11,7 @@ HttpHealthServer.run_thread()
 
 m = Mlalgorithm()
 
-# w = [1 for i in range(N)]
-w = [0.0, 0.0, 1.0]
+w = [0.0 for i in range(N)]
 
 while True:
     for message in consumer:
