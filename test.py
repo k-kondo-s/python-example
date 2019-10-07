@@ -30,10 +30,11 @@ if __name__ == '__main__':
     count = 0
     limit = len(pd.read_csv('./d.csv'))
     csv = pd.read_csv('./d.csv')
+    separation = 10
     while True:
         for message in consumer:
             count += 1
-            if count % 1 == 0:
+            if count % separation == 0:
                 do(message, csv, inc)
                 inc = count + 1
         # plt.show()
